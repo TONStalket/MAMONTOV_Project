@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Mamontov.com — новая социальная сеть{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-text">
+        <h1>Социальная сеть для тех, кто выбирает будущее</h1>
+        <p>Mamontov.com объединяет людей через живое общение, вдохновляющие сообщества и защищённый мессенджер. Регистрируйтесь с почтой Google и создавайте собственную историю.</p>
+        <div class="hero-actions">
+            <a class="button" href="{{ url_for('main.register') }}">Присоединиться</a>
+            <a class="button ghost" href="{{ url_for('main.login') }}">Войти</a>
+        </div>
+    </div>
+    <div class="hero-illustration">
+        <div class="card">
+            <h3>Мессенджер</h3>
+            <p>Общайтесь с сообществом в реальном времени, обменивайтесь идеями и планируйте совместные проекты.</p>
+        </div>
+        <div class="card">
+            <h3>Сообщества</h3>
+            <p>Создавайте клубы по интересам, делитесь новостями и будьте на связи 24/7.</p>
+        </div>
+    </div>
+</section>
+
+<section class="features-grid">
+    <article class="feature-card">
+        <h3>Google-авторизация</h3>
+        <p>Быстрая регистрация с Gmail. Безопасность и удобство по умолчанию.</p>
+    </article>
+    <article class="feature-card">
+        <h3>Быстрые сообщения</h3>
+        <p>Лёгкий и красивый чат, который всегда под рукой. Делитесь эмоциями без задержек.</p>
+    </article>
+    <article class="feature-card">
+        <h3>Забота о приватности</h3>
+        <p>Сообщения очищаются и шифруются на лету. Ваши данные остаются только вашими.</p>
+    </article>
+</section>
+
+<section class="cta">
+    <h2>Готовы стать частью Mamontov Enterprise?</h2>
+    <p>Откройте для себя новую социальную сеть уже сегодня.</p>
+    <a class="button" href="{{ url_for('main.register') }}">Создать профиль</a>
+</section>
+{% endblock %}

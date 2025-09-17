@@ -1,16 +1,40 @@
-# Compiled class file
-*.class
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+.env
+.venv
+venv/
+ENV/
+pip-wheel-metadata/
+.instance/
+instance/
+*.sqlite3
+*.db
 
-# Log file
+# Flask
 *.log
 
-# BlueJ files
+# Node / Frontend
+node_modules/
+
+# C++ build artifacts
+cpp/build/
+*.o
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Legacy Java-related ignores
+*.class
 *.ctxt
-
-# Mobile Tools for Java (J2ME)
 .mtj.tmp/
-
-# Package Files #
 *.jar
 *.war
 *.nar
@@ -18,7 +42,5 @@
 *.zip
 *.tar.gz
 *.rar
-
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*

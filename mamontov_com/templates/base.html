@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Mamontov.com{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <div class="page-wrapper">
+        <header class="topbar">
+            <div class="brand"><a href="{{ url_for('main.home') }}">mamontov<span>.com</span></a></div>
+            <nav class="topbar-nav">
+                {% if current_user %}
+                    <span class="welcome">Привет, {{ current_user.display_name }}!</span>
+                    <a class="button ghost" href="{{ url_for('main.messenger') }}">Мессенджер</a>
+                    <a class="button" href="{{ url_for('main.logout') }}">Выйти</a>
+                {% else %}
+                    <a class="button ghost" href="{{ url_for('main.login') }}">Войти</a>
+                    <a class="button" href="{{ url_for('main.register') }}">Создать аккаунт</a>
+                {% endif %}
+            </nav>
+        </header>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-container">
+                    {% for category, message in messages %}
+                        <div class="flash flash-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <main class="content">
+            {% block content %}{% endblock %}
+        </main>
+
+        <footer class="footer">
+            <p>© {{ current_year }} Mamontov Enterprise. Социальная сеть нового поколения.</p>
+        </footer>
+    </div>
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

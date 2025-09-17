@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Мессенджер — Mamontov.com{% endblock %}
+
+{% block content %}
+<section class="messenger">
+    <div class="chat-card">
+        <header class="chat-header">
+            <div>
+                <h1>Mamontov Messenger</h1>
+                <p>Общение в реальном времени с участниками сообщества.</p>
+            </div>
+            <span class="status">В сети</span>
+        </header>
+        <div class="chat-body" id="chatMessages" aria-live="polite"></div>
+        <form class="chat-input" id="chatForm">
+            <textarea id="messageInput" name="content" rows="2" placeholder="Напишите сообщение..." maxlength="500" required></textarea>
+            <button class="button" type="submit">Отправить</button>
+        </form>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/chat.js') }}" defer></script>
+{% endblock %}
