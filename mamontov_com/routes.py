@@ -18,7 +18,7 @@ from flask import (
 from sqlalchemy import desc
 
 from . import db
-from .models import Message, User
+from .models import Message, Post, User
 from .sanitizer import sanitize_message
 
 bp = Blueprint("main", __name__)
@@ -173,6 +173,69 @@ def api_create_message() -> Response:
                 "author": message.author.display_name,
                 "content": message.content,
                 "created_at": message.created_at.isoformat(),
+            }
+        ),
+        201,
+    )
+
+
+@bp.route("/community")
+def community() -> str:
+    posts = Post.query.order_by(desc(Post.created_at)).limit(50).all()
+    return render_template("community.html", posts=posts)
+
+
+@bp.route("/api/posts", methods=["GET"])
+def api_posts() -> Response:
+    posts = Post.query.order_by(desc(Post.created_at)).limit(50).all()
+    payload = [
+        {
+            "id": post.id,
+            "author": post.author.display_name,
+            "title": post.title,
+            "content": post.content,
+            "created_at": post.created_at.isoformat(),
+        }
+        for post in posts
+    ]
+    return jsonify(payload)
+
+
+@bp.route("/api/posts", methods=["POST"])
+@login_required
+def api_create_post() -> Response:
+    data = request.get_json(silent=True) or {}
+    raw_title = str(data.get("title", "")).strip()
+    raw_content = str(data.get("content", "")).strip()
+
+    if len(raw_title) > 150:
+        return jsonify({"error": "Заголовок слишком длинный."}), 400
+
+    title = sanitize_message(raw_title, max_length=120)
+    content = sanitize_message(raw_content, max_length=2000)
+
+    if not title:
+        return jsonify({"error": "Заголовок обязателен."}), 400
+
+    if not content:
+        return jsonify({"error": "Текст публикации не может быть пустым."}), 400
+
+    user = get_current_user()
+    if not user:
+        return jsonify({"error": "Требуется авторизация."}), 401
+
+    post = Post(author=user, title=title, content=content)
+    db.session.add(post)
+    db.session.commit()
+
+    return (
+        jsonify(
+            {
+                "id": post.id,
+                "author": post.author.display_name,
+                "title": post.title,
+                "content": post.content,
+                "created_at": post.created_at.isoformat(),
             }
         ),
         201,

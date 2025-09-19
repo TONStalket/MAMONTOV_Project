@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Сообщество — Mamontov.com{% endblock %}
+
+{% block content %}
+<section class="community">
+    <div class="community-header">
+        <div>
+            <h1>Лента сообщества</h1>
+            <p>Делитесь новостями и идеями с участниками Mamontov. Лучшие публикации остаются в истории.</p>
+        </div>
+        <a class="button ghost" href="{{ url_for('main.messenger') }}">Перейти в чат</a>
+    </div>
+
+    {% if current_user %}
+    <form class="post-form" id="postForm" autocomplete="off">
+        <h2>Новая публикация</h2>
+        <label for="postTitle">Заголовок</label>
+        <input id="postTitle" name="title" type="text" maxlength="120" placeholder="О чём вы хотите рассказать?" required>
+        <label for="postContent">Текст</label>
+        <textarea id="postContent" name="content" rows="4" maxlength="2000" placeholder="Поделитесь новостями сообщества" required></textarea>
+        <div class="post-form-footer">
+            <span class="hint">До 120 символов в заголовке и 2000 — в тексте.</span>
+            <button class="button" type="submit">Опубликовать</button>
+        </div>
+    </form>
+    {% else %}
+    <div class="post-form post-form-disabled">
+        <h2>Создавайте публикации после входа</h2>
+        <p>Авторизуйтесь или зарегистрируйтесь, чтобы делиться событиями и поддерживать обсуждение.</p>
+        <div class="post-form-actions">
+            <a class="button" href="{{ url_for('main.login') }}">Войти</a>
+            <a class="button ghost" href="{{ url_for('main.register') }}">Создать аккаунт</a>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="posts-list" id="postsList">
+        {% for post in posts %}
+        <article class="post" data-post-id="{{ post.id }}">
+            <header class="post-header">
+                <h2 class="post-title">{{ post.title }}</h2>
+                <div class="post-meta">
+                    <span class="post-author">{{ post.author.display_name }}</span>
+                    <time class="post-time" datetime="{{ post.created_at.isoformat() }}">{{ post.created_at.strftime("%d.%m.%Y %H:%M") }}</time>
+                </div>
+            </header>
+            <p class="post-content">{{ post.content }}</p>
+        </article>
+        {% else %}
+        <p class="empty-state">Пока нет публикаций. Станьте первым, кто расскажет о чём-то важном.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/community.js') }}" defer></script>
+{% endblock %}
