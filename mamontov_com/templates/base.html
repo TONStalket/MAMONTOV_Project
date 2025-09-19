@@ -17,9 +17,11 @@
             <nav class="topbar-nav">
                 {% if current_user %}
                     <span class="welcome">Привет, {{ current_user.display_name }}!</span>
+                    <a class="button ghost" href="{{ url_for('main.community') }}">Сообщество</a>
                     <a class="button ghost" href="{{ url_for('main.messenger') }}">Мессенджер</a>
                     <a class="button" href="{{ url_for('main.logout') }}">Выйти</a>
                 {% else %}
+                    <a class="button ghost" href="{{ url_for('main.community') }}">Сообщество</a>
                     <a class="button ghost" href="{{ url_for('main.login') }}">Войти</a>
                     <a class="button" href="{{ url_for('main.register') }}">Создать аккаунт</a>
                 {% endif %}

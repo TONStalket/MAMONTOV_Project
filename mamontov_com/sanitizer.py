@@ -46,12 +46,14 @@ class MessageSanitizer:
 
         return binary_path if binary_path.exists() else None
 
-    def sanitize(self, message: str) -> str:
+    def sanitize(self, message: str, *, max_length: int = 500) -> str:
         if not message:
             return ""
 
+        max_length = max(1, max_length)
+
         if not self._binary_path:
-            return self._python_sanitize(message)
+            return self._python_sanitize(message, max_length=max_length)
 
         try:
             completed = subprocess.run(
@@ -61,19 +63,19 @@ class MessageSanitizer:
                 capture_output=True,
             )
             output = completed.stdout.decode("utf-8", errors="ignore")
-            return output.strip()
+            return output.strip()[:max_length]
         except subprocess.SubprocessError:
-            return self._python_sanitize(message)
+            return self._python_sanitize(message, max_length=max_length)
 
     @staticmethod
-    def _python_sanitize(message: str) -> str:
+    def _python_sanitize(message: str, *, max_length: int = 500) -> str:
         sanitized = message.replace("\r", " ").replace("\n", " ")
         sanitized = " ".join(sanitized.split())
-        return sanitized[:500]
+        return sanitized[:max_length]
 
 
 sanitizer = MessageSanitizer()
 
 
-def sanitize_message(message: str) -> str:
-    return sanitizer.sanitize(message)
+def sanitize_message(message: str, *, max_length: int = 500) -> str:
+    return sanitizer.sanitize(message, max_length=max_length)
